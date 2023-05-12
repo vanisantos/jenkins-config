@@ -6,13 +6,15 @@ pipeline {
             steps {
                 bat "echo building project"
                 bat "mvn clean package"
-            }
-        }
-        stage('Test') {
-            steps {
-                bat "echo testing project"
-                bat 'mvn test'
+                bat 'echo build completed.'
             }
         }
     }
+    post {
+        success {
+            junit '**/target/surefire-reports/TEST-*.xml'
+            archiveArtifacts '/target/*.jar'
+        }
+    }
+
 }
